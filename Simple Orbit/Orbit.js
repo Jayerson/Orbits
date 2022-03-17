@@ -17,12 +17,22 @@ const delay = (ms) => {
 }
 
 const variableSpeed = async () => {
-    const start = Date.now();
-    
-    for (let degrees = 0; degrees < 360; degrees+=5) {
-        let startloop = Date.now()/1000;
 
-        segment_time(degrees);
+    console.log(semi_maj, eccentricity);
+
+    for (let time = 0; time < 10000; time += 20) {
+        
+        let degrees = Math.acos(
+                                (
+                                    (50 * semi_maj /(time **2) + 0.5)
+                                    * (1 - eccentricity) - 1 + Math.PI / 2
+                                )
+                                    /
+                                (
+                                    eccentricity * semi_maj
+                                )
+                            );
+        console.log(degrees);
 
         orbits.ellipse(
             centroid_x,
@@ -33,20 +43,9 @@ const variableSpeed = async () => {
             degrees/360*2*Math.PI,
             (degrees + 5)/360*2*Math.PI);
 
-        await delay(segment_time);
+        await delay(20);
         orbits.stroke();
-        
-        let endloop = Date.now()/1000;
-        console.log(endloop - startloop);
     }
-    console.log((Date.now() - start)/1000);
-}
-
-function segment_time(degrees) {
-    let dist_angle = semi_maj * (1 - eccentricity ** 2) /
-        (1 - eccentricity * Math.cos(degrees/360*2*Math.PI) - Math.PI/2);
-    let segment_speed = Math.sqrt(Math.abs(2/dist_angle - 1/semi_maj));
-    return Math.round(10/segment_speed);
 }
 
 orbits.beginPath();
