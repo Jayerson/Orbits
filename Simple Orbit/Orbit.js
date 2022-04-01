@@ -20,19 +20,22 @@ const variableSpeed = async () => {
 
     console.log(semi_maj, eccentricity);
 
-    for (let time = 0; time < 10000; time += 20) {
+    let start = 0;
+
+    for (let time = 20; time < 10000; time += 20) {
         
         let degrees = Math.acos(
-                                (
-                                    (50 * semi_maj /(time **2) + 0.5)
-                                    * (1 - eccentricity) - 1 + Math.PI / 2
-                                )
-                                    /
-                                (
-                                    eccentricity * semi_maj
-                                )
-                            );
-        console.log(degrees);
+            (
+                (50 * semi_maj /(time **2) + 0.5)
+                * (1 - eccentricity)
+                - 1 + Math.PI / 2
+            )
+                /
+            (
+                eccentricity * semi_maj
+            )
+        );
+        let end = +(start) + +(degrees);
 
         orbits.ellipse(
             centroid_x,
@@ -40,11 +43,15 @@ const variableSpeed = async () => {
             semi_maj,
             semi_min,
             3*Math.PI/2, 
-            degrees/360*2*Math.PI,
-            (degrees + 5)/360*2*Math.PI);
+            start/180*Math.PI,
+            end/180*Math.PI);
 
         await delay(20);
         orbits.stroke();
+
+        console.log(start, end, degrees);
+
+        start += Number(degrees);
     }
 }
 
